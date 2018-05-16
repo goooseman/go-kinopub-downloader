@@ -1,7 +1,6 @@
 package getplaylist
 
 import (
-	"fmt"
 	"io/ioutil"
 	"testing"
 )
@@ -24,9 +23,8 @@ func TestDownloadPlaylist(t *testing.T) {
 		}
 		resultFileBuf, err := ioutil.ReadFile(playlistForTest.ResultFile)
 		if err != nil {
-			t.Fatal(err, playlistForTest.Link)
+			t.Fatal(err, playlistForTest.ResultFile)
 		}
-		fmt.Println(string(resultFileBuf))
 		if result != string(resultFileBuf) {
 			t.Errorf("Wrong result for playlist %v", playlistForTest.Link)
 		}
