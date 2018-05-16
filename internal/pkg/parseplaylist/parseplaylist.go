@@ -73,12 +73,11 @@ func downloadPlaylist(u *url.URL) (io.ReadCloser, error) {
 
 }
 
-// ParsePlaylist recieves m3u8 playlist file and returns download links in a string devided with new line character
-func ParsePlaylist(url *url.URL) (result string, err error) {
+func parsePlaylistFromURI(url *url.URL) (result string, err error) {
 	body, err := downloadPlaylist(url)
 	p, listType, err := m3u8.DecodeFrom(body, true)
 	if err != nil {
-		panic(err)
+		return
 	}
 	switch listType {
 	case m3u8.MASTER:
@@ -89,18 +88,28 @@ func ParsePlaylist(url *url.URL) (result string, err error) {
 				if alternative.Type == "SUBTITLES" {
 					altURL, err := contentLink(alternative.URI, url)
 					if err != nil {
-						panic(err)
+						return "", err
 					}
 					result += altURL.String() + "\n"
 				}
 			}
 			videoURL, err := contentLink(variant.URI, url)
 			if err != nil {
-				panic(err)
+				return "", err
 			}
 			result += videoURL.String() + "\n"
 			result += "\n\n"
 		}
 	}
+	return
+}
+
+// ParsePlaylist recieves m3u8 playlist file link as string and returns download links in a string devided with new line character
+func ParsePlaylist(link string) (result string, err error) {
+	uri, err := url.Parse(link)
+	if err != nil {
+		return
+	}
+	result, err = parsePlaylistFromURI(uri)
 	return
 }

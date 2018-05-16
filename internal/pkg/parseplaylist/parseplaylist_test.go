@@ -2,7 +2,6 @@ package parseplaylist
 
 import (
 	"fmt"
-	"net/url"
 	"testing"
 )
 
@@ -35,11 +34,7 @@ https://cdn.streambox.in/hls/kinopub/aWQ9MTUxMTIzOzEzMDA5ODM2ODQ7MDs2NDk4OTMmaD1
 		},
 	}
 	for _, playlistForTest := range playlistsForTest {
-		url, err := url.Parse(playlistForTest.Link)
-		if err != nil {
-			t.Fatal(err, playlistForTest.Name)
-		}
-		result, err := ParsePlaylist(url)
+		result, err := ParsePlaylist(playlistForTest.Link)
 		if err != nil {
 			t.Fatal(err, playlistForTest.Name)
 		}
