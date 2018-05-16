@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"regexp"
 	"strings"
 	"time"
 
@@ -40,11 +41,14 @@ func contentLink(rawurl string, u *url.URL) (uri *url.URL, err error) {
 	if err != nil {
 		return
 	}
+	re := regexp.MustCompile(`\/[^\/]+\.m3u8`)
+	rawurl = re.ReplaceAllString(rawurl, ``)
 
 	uri, err = u.Parse(rawurl)
 	if err != nil {
 		return
 	}
+	uri.RawQuery = ""
 
 	return
 }
