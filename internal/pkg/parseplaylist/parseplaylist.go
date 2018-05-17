@@ -44,6 +44,8 @@ func contentLink(rawurl string, u *url.URL) (uri *url.URL, err error) {
 	re := regexp.MustCompile(`\/[^\/]+\.m3u8`)
 	rawurl = re.ReplaceAllString(rawurl, ``)
 
+	rawurl = strings.Replace(rawurl, "/hls/", "/pd/", 1)
+
 	uri, err = u.Parse(rawurl)
 	if err != nil {
 		return
